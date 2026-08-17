@@ -19,4 +19,37 @@ public class Todo {
 
     // Shows whether the Todo is completed.
     private boolean completed;
+
+
+    // Returns the Todo ID.
+    public Long getId() {
+        return id;
+    }
+
+    // Sets the Todo ID.
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    // Returns the Todo title.
+    public String getTitle() {
+        return title;
+    }
+
+    // Sets the Todo title.
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    // Returns whether the Todo is completed.
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    // Sets the completed status.
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
 }
