@@ -1,5 +1,4 @@
 TodoApp
-(Chat heter ´TodoApp springboot´ i ChatGPT)
 
 Steg 1: Klart 16 aug. 2026
 Skapade en REST Controller med två GET-endpoints:
