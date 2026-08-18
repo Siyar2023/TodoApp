@@ -10,3 +10,16 @@ Content-Type: application/json
 
 ### Get all Todos
 GET http://localhost:8080/todos
+
+
+### Update Todo
+PUT http://localhost:8080/todos/1
+Content-Type: application/json
+
+### Delete Todo
+DELETE http://localhost:8080/todos/1
+
+{
+  "title": "Learn Spring Boot",
+  "completed": true
+}

@@ -1,0 +1,62 @@
+TodoApp
+(Chat heter ´TodoApp springboot´ i ChatGPT)
+
+Steg 1: Klart 16 aug. 2026
+Skapade en REST Controller med två GET-endpoints:
+
+GET /hello → Returnerar ett testmeddelande.
+GET /todos → Returnerar en lista med Todo-uppgifter.
+
+@RestController → Definierar REST-controllern.
+@GetMapping → Skapar en GET-endpoint.
+
+Syfte: Lära sig hur REST API-endpoints fungerar i Spring Boot.
+
+______________________________________________________________
+Steg 2: KLART 17 Aug. 2026
+
+Skapade en Java-klass som beskriver vad en Todo innehåller:
+
+* `id` → Unikt ID för Todo.
+* `title` → Namnet/texten på Todo.
+* `completed` → Visar om Todo är klar eller inte.
+
+`@Entity` → Kopplar Todo-klassen till databasen.
+`@Id` → Anger Todo:s unika ID.
+`@GeneratedValue` → Skapar ID automatiskt.
+
+**Syfte:** Lära sig skapa en modell/klass för Todo-uppgifter och koppla den till databasen.
+______________________________________________________________
+Steg 3: Klart ✅ 17 aug. 2026
+Skapade POST /todos för att skapa och spara Todo-uppgifter.
+Skapade GET /todos för att hämta Todo-uppgifter från H2-databasen.
+
+Syfte: Lära sig skapa och hämta data via REST API.
+
+______________________________________________________________
+Steg 4: KLART ✅ 18n Aug. 2026
+
+**Uppdatera en Todo med PUT**
+
+Lade till funktion för att uppdatera en befintlig Todo med hjälp av dess ID.
+
+**Syfte:** Lära sig hur man uppdaterar data i databasen via ett REST API.
+
+**Testat:** Todo med ID 1 uppdaterades från ej klar till klar.
+
+**Status:** Fungerar och är pushat till GitHub.
+______________________________________________________________
+### Steg 5: KLART ✅
+
+**Ta bort en Todo med DELETE**
+
+Lade till funktion för att ta bort en befintlig Todo från databasen med hjälp av dess ID.
+
+**Syfte:** Lära sig hur man tar bort data från databasen via ett REST API.
+
+**Testat:** Todo med ID 1 togs bort och kontrollerades sedan med GET. Resultatet blev en tom lista.
+
+**Status:** DELETE fungerar och Steg 5 är klart.
+______________________________________________________________
+
+

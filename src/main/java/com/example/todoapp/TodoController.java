@@ -3,6 +3,18 @@ package com.example.todoapp;
 // The package name follows the project structure.
 
 
+import org.springframework.web.bind.annotation.PutMapping;
+// Imports @PutMapping.
+// It is used to create an HTTP PUT endpoint.
+// PUT is normally used to update existing data.
+
+
+import org.springframework.web.bind.annotation.PathVariable;
+// Imports @PathVariable.
+// It is used to read a value from the URL,
+// such as the Todo ID in /todos/{id}.
+
+
 import org.springframework.web.bind.annotation.GetMapping;
 // Imports @GetMapping.
 // @GetMapping is used to create HTTP GET endpoints.
@@ -25,6 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 // Imports @RestController.
 // @RestController tells Spring that this class handles REST API requests.
 // The methods in this class can return data directly to the client.
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+// Imports @DeleteMapping.
+// It is used to create an HTTP DELETE endpoint.
+// DELETE is normally used to remove existing data.
 
 
 import java.util.List;
@@ -100,5 +117,57 @@ public class TodoController {
         //
         // The save() method is provided by JpaRepository.
         // The saved Todo object is returned to the client.
+    }
+
+
+    @PutMapping("/todos/{id}")
+    // Creates a PUT endpoint:
+    // http://localhost:8080/todos/1
+    //
+    // PUT is used to update an existing Todo.
+
+
+    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo updatedTodo) {
+        // Defines the updateTodo() method.
+        //
+        // @PathVariable gets the Todo ID from the URL.
+        // @RequestBody receives the new Todo data from the request body.
+
+
+        Todo todo = todoRepository.findById(id).orElseThrow();
+        // Finds the existing Todo in the database using its ID.
+        // If the Todo does not exist, an exception is thrown.
+
+
+        todo.setTitle(updatedTodo.getTitle());
+        // Updates the title of the existing Todo.
+
+
+        todo.setCompleted(updatedTodo.isCompleted());
+        // Updates the completed status of the existing Todo.
+
+
+
+        return todoRepository.save(todo);
+        // Saves the updated Todo in the database.
+        // Returns the updated Todo to the client.
+
+
+    }
+    @DeleteMapping("/todos/{id}")
+    // Creates a DELETE endpoint:
+    // http://localhost:8080/todos/1
+    //
+    // DELETE is used to remove an existing Todo.
+
+
+    public void deleteTodo(@PathVariable Long id) {
+        // Defines the deleteTodo() method.
+        //
+        // @PathVariable gets the Todo ID from the URL.
+
+
+        todoRepository.deleteById(id);
+        // Deletes the Todo with the specified ID from the database.
     }
 }
