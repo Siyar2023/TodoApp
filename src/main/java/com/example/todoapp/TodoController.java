@@ -134,9 +134,11 @@ public class TodoController {
         // @RequestBody receives the new Todo data from the request body.
 
 
-        Todo todo = todoRepository.findById(id).orElseThrow();
-        // Finds the existing Todo in the database using its ID.
-        // If the Todo does not exist, an exception is thrown.
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new TodoNotFoundException(id));
+// Finds the Todo with the specified ID in the database.
+// If the Todo exists, it is returned.
+// If the Todo does not exist, TodoNotFoundException is thrown.
 
 
         todo.setTitle(updatedTodo.getTitle());
