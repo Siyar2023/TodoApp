@@ -1,7 +1,3 @@
-
-
-
-
 ### Create a new Todo
 POST http://localhost:8080/todos
 Content-Type: application/json
@@ -29,4 +25,17 @@ Content-Type: application/json
 ### Delete Todo
 DELETE http://localhost:8080/todos/1
 
+
+### Get all Todos after delete
+GET http://localhost:8080/todos
+
+
+### Not Found test
+PUT http://localhost:8080/todos/999
+Content-Type: application/json
+
+{
+  "title": "Test Todo",
+  "completed": true
+}
 
