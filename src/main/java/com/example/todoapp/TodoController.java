@@ -17,26 +17,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.GetMapping;
 // Imports @GetMapping.
-// @GetMapping is used to create HTTP GET endpoints.
+// It is used to create HTTP GET endpoints.
 // GET is normally used to retrieve data.
 
 
 import org.springframework.web.bind.annotation.PostMapping;
 // Imports @PostMapping.
-// @PostMapping is used to create HTTP POST endpoints.
+// It is used to create HTTP POST endpoints.
 // POST is normally used to create new data.
 
 
 import org.springframework.web.bind.annotation.RequestBody;
 // Imports @RequestBody.
-// @RequestBody reads data sent in the HTTP request body.
-// It allows Spring to convert JSON data into a Java object.
+// It reads data sent in the HTTP request body.
+// Spring converts the JSON data into a Java object.
 
 
 import org.springframework.web.bind.annotation.RestController;
 // Imports @RestController.
-// @RestController tells Spring that this class handles REST API requests.
+// It tells Spring that this class handles REST API requests.
 // The methods in this class can return data directly to the client.
+
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 // Imports @DeleteMapping.
@@ -55,19 +56,30 @@ import java.util.List;
 
 public class TodoController {
 
+    private final TodoService todoService;
+    // Creates a reference to TodoService.
+    // The Controller uses the Service Layer to handle application logic.
+
+
     private final TodoRepository todoRepository;
     // Creates a reference to TodoRepository.
-    // The controller uses the repository to communicate with the database.
+    // POST, PUT and DELETE still use the Repository directly for now.
+    // These operations will be moved to TodoService in later steps.
 
 
-    public TodoController(TodoRepository todoRepository) {
-        // Constructor used by Spring to provide the TodoRepository.
-        // Spring automatically injects the repository into this controller.
+    public TodoController(
+            TodoService todoService,
+            TodoRepository todoRepository) {
+        // Constructor used by Spring to provide TodoService
+        // and TodoRepository automatically.
+
+        this.todoService = todoService;
+        // Stores TodoService so the Controller can use it.
 
 
         this.todoRepository = todoRepository;
-        // Stores the TodoRepository in this controller.
-        // We can now use it to access the database.
+        // Stores TodoRepository so the Controller can use it
+        // for the operations that have not yet been moved to the Service Layer.
     }
 
 
@@ -79,44 +91,25 @@ public class TodoController {
     // Spring calls the getTodos() method.
 
 
-    public List<Todo> getTodos() {
-        // Defines the getTodos() method.
-        // The method returns a List containing Todo objects.
+    public List<TodoDTO> getTodos() {
+        // Returns a list of TodoDTO objects to the frontend.
 
-
-        return todoRepository.findAll();
-        // Calls findAll() from JpaRepository.
-        // It retrieves all Todo objects from the database.
-        //
-        // The Todo objects are then returned to the client.
+        return todoService.getAllTodos();
+        // Calls the Service Layer to retrieve the Todos as DTOs.
     }
 
 
     @PostMapping("/todos")
     // Creates a POST endpoint:
     // http://localhost:8080/todos
-    //
     // POST is used to create a new Todo.
 
 
-    public Todo createTodo(@RequestBody Todo todo) {
-        // Defines the createTodo() method.
-        //
-        // @RequestBody receives JSON data from the client.
-        // Spring converts the JSON data into a Todo object.
-        //
-        // Example JSON:
-        // {
-        //     "title": "Learn Spring Boot",
-        //     "completed": false
-        // }
+    public Todo createTodo(@RequestBody TodoDTO todoDTO) {
+        // Receives Todo data from the frontend through TodoDTO.
 
-
-        return todoRepository.save(todo);
-        // Saves the Todo object to the database.
-        //
-        // The save() method is provided by JpaRepository.
-        // The saved Todo object is returned to the client.
+        return todoService.createTodo(todoDTO);
+        // Sends the DTO to the Service Layer.
     }
 
 
@@ -127,35 +120,18 @@ public class TodoController {
     // PUT is used to update an existing Todo.
 
 
-    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo updatedTodo) {
-        // Defines the updateTodo() method.
-        //
-        // @PathVariable gets the Todo ID from the URL.
-        // @RequestBody receives the new Todo data from the request body.
+    public Todo updateTodo(
+            @PathVariable Long id,
+            @RequestBody TodoDTO todoDTO) {
+        // Gets the Todo ID from the URL.
+        // Receives the updated Todo data through TodoDTO.
 
-
-        Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException(id));
-// Finds the Todo with the specified ID in the database.
-// If the Todo exists, it is returned.
-// If the Todo does not exist, TodoNotFoundException is thrown.
-
-
-        todo.setTitle(updatedTodo.getTitle());
-        // Updates the title of the existing Todo.
-
-
-        todo.setCompleted(updatedTodo.isCompleted());
-        // Updates the completed status of the existing Todo.
-
-
-
-        return todoRepository.save(todo);
-        // Saves the updated Todo in the database.
-        // Returns the updated Todo to the client.
-
-
+        return todoService.updateTodo(id, todoDTO);
+        // Sends the DTO to the Service Layer.
+        // The Service updates the Todo entity.
     }
+
+
     @DeleteMapping("/todos/{id}")
     // Creates a DELETE endpoint:
     // http://localhost:8080/todos/1
@@ -169,7 +145,8 @@ public class TodoController {
         // @PathVariable gets the Todo ID from the URL.
 
 
-        todoRepository.deleteById(id);
-        // Deletes the Todo with the specified ID from the database.
+        todoService.deleteTodo(id);
+// Calls the Service Layer to delete the Todo.
+// The Service communicates with the Repository.
     }
 }
