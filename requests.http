@@ -13,7 +13,7 @@ GET http://localhost:8080/todos
 
 
 ### Update Todo
-PUT http://localhost:8080/todos/2
+PUT http://localhost:8080/todos/1
 Content-Type: application/json
 
 {
