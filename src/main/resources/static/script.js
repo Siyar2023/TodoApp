@@ -24,8 +24,42 @@ async function loadTodos() {
         // Creates a new list item
         const li = document.createElement("li");
 
+        // Creates a text element for the Todo
+        const text = document.createElement("span");
+
         // Displays the Todo title and completion status
-        li.textContent = `${todo.title} - ${todo.completed ? "Completed" : "Not completed"}`;
+        text.textContent = `${todo.title} - ${todo.completed ? "Completed" : "Not completed"}`;
+
+        // Creates a Complete button
+        const completeButton = document.createElement("button");
+
+        // Sets the button text
+        completeButton.textContent = todo.completed ? "Undo" : "Complete";
+
+        // Adds a click event to the Complete button
+        completeButton.onclick = async () => {
+            await toggleTodo(todo);
+        };
+
+        // Creates a Delete button
+        const deleteButton = document.createElement("button");
+
+        // Sets the button text
+        deleteButton.textContent = "Delete";
+
+        // Adds a click event to the Delete button
+        deleteButton.onclick = async () => {
+            await deleteTodo(todo.id);
+        };
+
+        // Adds the Todo text to the list item
+        li.appendChild(text);
+
+        // Adds the Complete button to the Todo
+        li.appendChild(completeButton);
+
+        // Adds the Delete button to the Todo
+        li.appendChild(deleteButton);
 
         // Adds the Todo to the webpage
         todoList.appendChild(li);
@@ -36,7 +70,7 @@ async function loadTodos() {
 // Adds a new Todo
 async function addTodo() {
 
-    // Gets the title from the input field
+    // Gets the input field
     const titleInput = document.getElementById("title");
 
     // Gets the text entered by the user
@@ -44,8 +78,6 @@ async function addTodo() {
 
     // Sends a POST request to create a new Todo
     await fetch("/todos", {
-
-        // HTTP method used to create a new Todo
         method: "POST",
 
         // Tells the backend that we are sending JSON
@@ -64,9 +96,48 @@ async function addTodo() {
     titleInput.value = "";
 
     // Reloads the Todo list
-    loadTodos();
+    await loadTodos();
 }
 
 
-// Loads the Todos when the page is opened
-loadTodos();
+// Toggles a Todo between completed and not completed
+async function toggleTodo(todo) {
+
+    // Sends a PUT request to update the Todo
+    await fetch(`/todos/${todo.id}`, {
+        method: "PUT",
+
+        // Tells the backend that we are sending JSON
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        // Sends the updated Todo data
+        body: JSON.stringify({
+            title: todo.title,
+            completed: !todo.completed
+        })
+    });
+
+    // Reloads the Todo list
+    await loadTodos();
+}
+
+
+// Deletes a Todo from the backend
+async function deleteTodo(id) {
+
+    // Sends a DELETE request to the backend
+    await fetch(`/todos/${id}`, {
+        method: "DELETE"
+    });
+
+    // Reloads the Todo list
+    await loadTodos();
+}
+
+
+/// Loads the Todos when the page is opened
+(async function () {
+    await loadTodos();
+})();
